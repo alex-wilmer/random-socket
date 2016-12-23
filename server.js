@@ -3,22 +3,20 @@ import koaRouter from 'koa-router'
 import fetch from 'isomorphic-fetch'
 import FormData from 'form-data'
 
-let router = koaRouter({ prefix: `/${process.env.PREFIX}` })
-
-let app = new Koa()
-
 let port = process.env.PORT || 3002
+let router = koaRouter({ prefix: `/${process.env.PREFIX}` })
+let app = new Koa()
 
 let clientID = `0d2b92a89088494488cb5633a3b039f7`
 let clientSecret = `e4b8ef6399a84517a85255925f7b4d6f`
-let redirectUri = `http://benevolent.ninja/${process.env.PREFIX}/redirect`
 
+let redirectUri = `http://benevolent.ninja/${process.env.PREFIX}/redirect`
 let instaBase = `https://api.instagram.com`
+
 let authUrl = `${instaBase}/oauth/authorize/?`
 + `client_id=${clientID}&redirect_uri=${redirectUri}&response_type=code`
 
 let tokenResponse
-
 let user
 let media = []
 
@@ -43,17 +41,7 @@ let getAccessToken = async code => {
     console.log(`token response: `, tokenResponse)
 
     if (tokenResponse.access_token) {
-      let r = await fetch(`
-        ${instaBase}/v1/users/search?q=lauradittmann&access_token=${tokenResponse.access_token}`
-      )
-
-      let j = await r.json()
-
-      console.log(`j?: `, j)
-
-      // user = j.data.find(x => x.username === `lauradittmann`)
-
-      // console.log(`user is: `, user)
+      getLatestMedia()
     }
 
   } catch(e) {
@@ -61,28 +49,24 @@ let getAccessToken = async code => {
   }
 }
 
-let getLatestMedia
+let getLatestMedia = async () => {
+  let r = await fetch(`
+    ${instaBase}/v1/users/self/media/recent/?access_token=${tokenResponse.access_token}`
+  )
 
-// setInterval(() => {
-//   if (tokenResponse && tokenResponse.access_token) {
-//     try {
-//       let r = await fetch(`https://api.instagram.com/v1/users/{user-id}/media/recent/?access_token=ACCESS-TOKEN`, {
-//         method: `POST`,
-//         body: form,
-//       })
-//
-//       let j = await r.json()
-//
-// }, 1000)
+  let j = await r.json()
+
+  console.log(`latestMedia `, j)
+}
 
 router
-  .get(`/`, (ctx, next) => {
+  .get(`/`, ctx => {
     ctx.body = `
       <a href="${authUrl}">
         Sign up
       </a>`
   })
-  .get(`/redirect`, (ctx, next) => {
+  .get(`/redirect`, ctx => {
     getAccessToken(ctx.query.code)
     ctx.body = `Thanks! You're signed in`
   })
