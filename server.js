@@ -13,10 +13,14 @@ let clientID = `0d2b92a89088494488cb5633a3b039f7`
 let clientSecret = `e4b8ef6399a84517a85255925f7b4d6f`
 let redirectUri = `http://benevolent.ninja/${process.env.PREFIX}/redirect`
 
-let authUrl = `https://api.instagram.com/oauth/authorize/?`
+let instaBase = `https://api.instagram.com`
+let authUrl = `${instaBase}/oauth/authorize/?`
 + `client_id=${clientID}&redirect_uri=${redirectUri}&response_type=code`
 
 let tokenResponse
+
+let user
+let media = []
 
 let getAccessToken = async code => {
   let form = new FormData()
@@ -28,7 +32,7 @@ let getAccessToken = async code => {
   form.append(`code`, code)
 
   try {
-    let r = await fetch(`https://api.instagram.com/oauth/access_token`, {
+    let r = await fetch(`${instaBase}/oauth/access_token`, {
       method: `POST`,
       body: form,
     })
@@ -36,12 +40,38 @@ let getAccessToken = async code => {
     let j = await r.json()
 
     tokenResponse = j
+    console.log(`token response: `, tokenResponse)
 
-    console.log(tokenResponse)
+    if (tokenResponse.access_token) {
+      let r = await fetch(`
+        ${instaBase}/v1/users/search?q=lauradittmann&access_token=${j.access_token}`
+      )
+
+      let j = await r.json()
+
+      user = j.data.find(x => x.username === `lauradittmann`)
+
+      console.log(`user is: `, user)
+    }
+
   } catch(e) {
     throw e
   }
 }
+
+let getLatestMedia
+
+// setInterval(() => {
+//   if (tokenResponse && tokenResponse.access_token) {
+//     try {
+//       let r = await fetch(`https://api.instagram.com/v1/users/{user-id}/media/recent/?access_token=ACCESS-TOKEN`, {
+//         method: `POST`,
+//         body: form,
+//       })
+//
+//       let j = await r.json()
+//
+// }, 1000)
 
 router
   .get(`/`, (ctx, next) => {
