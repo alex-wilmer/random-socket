@@ -1,0 +1,24 @@
+{
+  "name": "instalite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "start": "node index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
+    "babel-register": "^6.18.0",
+    "eslint": "^3.12.2",
+    "eslint-config-minimal": "^0.3.1",
+    "eslint-plugin-react": "^6.8.0",
+    "koa": "next",
+    "koa-router": "next"
+  }
+}
