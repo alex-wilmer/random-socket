@@ -18,6 +18,8 @@
     "eslint": "^3.12.2",
     "eslint-config-minimal": "^0.3.1",
     "eslint-plugin-react": "^6.8.0",
+    "form-data": "^2.1.2",
+    "isomorphic-fetch": "^2.2.1",
     "koa": "next",
     "koa-router": "next"
   },
