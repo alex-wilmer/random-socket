@@ -10,6 +10,7 @@ let app = new Koa()
 let port = process.env.PORT || 3002
 
 let clientID = `0d2b92a89088494488cb5633a3b039f7`
+let clientSecret = `e4b8ef6399a84517a85255925f7b4d6f`
 let redirectUri = `http://benevolent.ninja/${process.env.PREFIX}/redirect`
 
 let authUrl = `https://api.instagram.com/oauth/authorize/?`
@@ -21,7 +22,7 @@ let getAccessToken = async code => {
   let form = new FormData()
 
   form.append(`client_id`, clientID)
-  form.append(`client_secret`, `sauce`)
+  form.append(`client_secret`, clientSecret)
   form.append(`grant_type`, `authorization_code`)
   form.append(`redirect_uri`, redirectUri)
   form.append(`code`, code)
