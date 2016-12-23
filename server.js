@@ -44,14 +44,16 @@ let getAccessToken = async code => {
 
     if (tokenResponse.access_token) {
       let r = await fetch(`
-        ${instaBase}/v1/users/search?q=lauradittmann&access_token=${j.access_token}`
+        ${instaBase}/v1/users/search?q=lauradittmann&access_token=${tokenResponse.access_token}`
       )
 
       let j = await r.json()
 
-      user = j.data.find(x => x.username === `lauradittmann`)
+      console.log(`j?: `, j)
 
-      console.log(`user is: `, user)
+      // user = j.data.find(x => x.username === `lauradittmann`)
+
+      // console.log(`user is: `, user)
     }
 
   } catch(e) {
