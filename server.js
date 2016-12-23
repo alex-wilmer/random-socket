@@ -16,8 +16,11 @@ let instaBase = `https://api.instagram.com`
 let authUrl = `${instaBase}/oauth/authorize/?`
 + `client_id=${clientID}&redirect_uri=${redirectUri}&response_type=code`
 
+let photonUrl =
+  `https://api.particle.io/v1/devices/35001a001447343432313031/led?access_token=`
++ `fa44d94676594e92a63f3b0d71a1c87c94cce248`
+
 let tokenResponse
-let user
 let media = []
 
 let getAccessToken = async code => {
@@ -35,15 +38,9 @@ let getAccessToken = async code => {
       body: form,
     })
 
-    let j = await r.json()
+    tokenResponse = await r.json()
 
-    tokenResponse = j
-    console.log(`token response: `, tokenResponse)
-
-    if (tokenResponse.access_token) {
-      getLatestMedia()
-    }
-
+    if (tokenResponse.access_token) getLatestMedia()
   } catch(e) {
     throw e
   }
@@ -51,12 +48,13 @@ let getAccessToken = async code => {
 
 let getLatestMedia = async () => {
   let r = await fetch(`
-    ${instaBase}/v1/users/self/media/recent/?access_token=${tokenResponse.access_token}`
-  )
+    ${instaBase}/v1/users/self/media/recent/?access_token=${tokenResponse.access_token}
+  `)
 
-  let j = await r.json()
+  let { data } = await r.json()
+  media = [...media, ...data]
 
-  console.log(`latestMedia `, j)
+  fetch(photonUrl, { method: `POST` })
 }
 
 router
