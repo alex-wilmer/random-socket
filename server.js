@@ -54,10 +54,18 @@ let getLatestMedia = async () => {
 setInterval(() => {
   if (media.length) {
     media.forEach(async x => {
-      let r = await fetch(`${instaBase}/v1/media/${x.id}?access_token=${tokenResponse.access_token}`)
+      let r = await fetch(`
+        ${instaBase}/v1/media/${x.id}?access_token=${tokenResponse.access_token}
+      `)
+
       let j = await r.json()
 
-      console.log(`Hey hey hey`, j)
+      if (j.data.likes.count > x.count) {
+        // fire the torpedoes!
+        console.log(`!!! FIRE THE TORPEDOS !!!`)
+      }
+
+      x.count = j.data.likes.count
     })
   }
 }, 5000)
