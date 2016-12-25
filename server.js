@@ -49,9 +49,19 @@ let getLatestMedia = async () => {
 
   let { data } = await r.json()
   media = [...media, ...data.map(x => ({ id: x.id, likes: x.likes.count }))]
-
-  console.log(`Media :`, media)
 }
+
+setInterval(() => {
+  if (media.length) {
+    media.forEach(async x => {
+      let r = await fetch(`${instaBase}/v1/media/${x.id}?access_token=${tokenResponse.access_token}`)
+      let j = await r.json()
+
+      console.log(`Hey hey hey`, j)
+    })
+  }
+}, 5000)
+
 
 /*----------------------------------------------------------------------------*/
 
