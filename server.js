@@ -48,7 +48,7 @@ let getLatestMedia = async () => {
   `)
 
   let { data } = await r.json()
-  media = [...media, ...data]
+  media = [...media, ...data.map(x => ({ id: x.id, likes: x.likes.count }))]
 
   console.log(`Media :`, media)
 }
