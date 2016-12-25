@@ -2,26 +2,22 @@ import Koa from 'koa'
 import koaRouter from 'koa-router'
 import fetch from 'isomorphic-fetch'
 import FormData from 'form-data'
+import { instaBase, photonUrl, clientID, clientSecret, redirectUri } from './config'
+import Home from './Home'
+import Success from './Success'
+
+/*----------------------------------------------------------------------------*/
 
 let port = process.env.PORT || 3002
 let router = koaRouter({ prefix: `/${process.env.PREFIX}` })
 let app = new Koa()
 
-let clientID = `0d2b92a89088494488cb5633a3b039f7`
-let clientSecret = `e4b8ef6399a84517a85255925f7b4d6f`
-
-let redirectUri = `http://benevolent.ninja/${process.env.PREFIX}/redirect`
-let instaBase = `https://api.instagram.com`
-
-let authUrl = `${instaBase}/oauth/authorize/?`
-+ `client_id=${clientID}&redirect_uri=${redirectUri}&response_type=code`
-
-let photonUrl =
-  `https://api.particle.io/v1/devices/35001a001447343432313031/led?access_token=`
-+ `fa44d94676594e92a63f3b0d71a1c87c94cce248`
-
 let tokenResponse
 let media = []
+
+/*----------------------------------------------------------------------------*/
+
+let fireTorpedos = () => fetch(photonUrl, { method: `POST` })
 
 let getAccessToken = async code => {
   let form = new FormData()
@@ -53,20 +49,17 @@ let getLatestMedia = async () => {
 
   let { data } = await r.json()
   media = [...media, ...data]
-
-  fetch(photonUrl, { method: `POST` })
 }
+
+/*----------------------------------------------------------------------------*/
 
 router
   .get(`/`, ctx => {
-    ctx.body = `
-      <a href="${authUrl}">
-        Sign up
-      </a>`
+    ctx.body = Home
   })
   .get(`/redirect`, ctx => {
     getAccessToken(ctx.query.code)
-    ctx.body = `Thanks! You're signed in`
+    ctx.body = Success
   })
 
 app
