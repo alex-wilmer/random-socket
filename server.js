@@ -49,6 +49,8 @@ let getLatestMedia = async () => {
 
   let { data } = await r.json()
   media = [...media, ...data]
+
+  console.log(`Media :`, media)
 }
 
 /*----------------------------------------------------------------------------*/
