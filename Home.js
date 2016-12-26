@@ -32,6 +32,11 @@ let linkStyle = {
   textDecoration: `none`,
   color: `#fed801`,
   fontWeight: `bold`,
+  fontSize: `12px`,
+  marginTop: `10px`,
+  border: `2px solid`,
+  padding: `7px 9px`,
+  borderRadius: `4px`,
 }
 
 export default

@@ -3,6 +3,7 @@ import koaRouter from 'koa-router'
 import fetch from 'isomorphic-fetch'
 import FormData from 'form-data'
 import { instaBase, photonUrl, clientID, clientSecret, redirectUri } from './config'
+import html from './html'
 import Home from './Home'
 import Success from './Success'
 
@@ -75,11 +76,11 @@ setInterval(() => {
 
 router
   .get(`/`, ctx => {
-    ctx.body = Home
+    ctx.body = html(Home)
   })
   .get(`/redirect`, ctx => {
     getAccessToken(ctx.query.code)
-    ctx.body = Success
+    ctx.body = html(Success)
   })
 
 app
