@@ -1,17 +1,19 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import { authUrl } from './config'
+import Lite from './Lite'
 
 let Home = () =>
   <div style={container}>
-    <h1 style={fontStyle}>Welcome My Love</h1>
+    <Lite />
+    <h1 style={fontStyle}>Welcome, My Love</h1>
     <a style={linkStyle} href={authUrl}>
-      Click here to start the show.
+      Click here to activate your personal InstaLite!
     </a>
   </div>
 
 let container = {
-  backgroundColor: `rgb(188, 168, 195)`,
+  backgroundColor: `rgb(127, 18, 134)`,
   height: `100vh`,
   display: `flex`,
   justifyContent: `center`,
@@ -22,12 +24,14 @@ let container = {
 let fontStyle = {
   fontFamily: `Helvetica`,
   fontWeight: 100,
+  color: `white`,
 }
 
 let linkStyle = {
   ...fontStyle,
   textDecoration: `none`,
-  color: `#a20a0a`,
+  color: `#fed801`,
+  fontWeight: `bold`,
 }
 
 export default
